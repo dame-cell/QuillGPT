@@ -2,7 +2,7 @@
 QuillGPT is a project focused on exploring and optimizing large language models (LLMs) by leveraging the GPT-2 architecture to generate text in the style of Shakespeare.
 
 <p align="center">
-  <img src="images/image.webp" alt="dogs" width="700"/>
+  <img src="images/image.webp" alt="dogs" width="500" height="500"/>
 </p>
 
 
