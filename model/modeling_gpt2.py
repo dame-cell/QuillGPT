@@ -28,7 +28,7 @@ class MultiHeadAttention(nn.Module):
         mask_bool = self.mask.bool()[:seq_len, :seq_len]
         attn_scores.masked_fill_(mask_bool, float('-inf'))
         attn_weights = torch.softmax(attn_scores / (self.head_dim ** 0.5), dim=-1)
-        attn_weights = self.dropout(attn_weights)  # Apply dropout to attention weights
+        attn_weights = self.dropout(attn_weights)  
 
         context_vec = (attn_weights @ v).transpose(1, 2)
         context_vec = context_vec.contiguous().view(batch_size, seq_len, self.output_dim)
@@ -108,3 +108,5 @@ class GPT2(nn.Module):
         logits = self.final_layer(x)
 
         return logits
+
+
