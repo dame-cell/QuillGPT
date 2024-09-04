@@ -1,7 +1,8 @@
 import torch
+import torch.nn.functional as F 
 import tiktoken
 from torch.utils.data import Dataset, DataLoader
-
+from tqdm.auto import tqdm
 
 class GPTDatasetV1(Dataset):
     def __init__(self, txt, tokenizer, max_length, stride):
@@ -45,3 +46,29 @@ def create_dataloader_v1(txt, batch_size=16, max_length=512,
     )
 
     return dataloader
+
+def calc_loss_batch(input_batch, target_batch, model, device):
+    input_batch, target_batch = input_batch.to(device), target_batch.to(device)
+    logits = model(input_batch)
+    return F.cross_entropy(logits.flatten(0, 1), target_batch.flatten())
+
+def calc_loss_loader(data_loader, model, device, num_batches=None):
+    total_loss = 0.
+    num_batches = min(num_batches or len(data_loader), 100)  # Limit to 100 batches for faster evaluation
+    
+    for i, (input_batch, target_batch) in enumerate(data_loader):
+        if i < num_batches:
+            total_loss += calc_loss_batch(input_batch, target_batch, model, device).item()
+        else:
+            break
+    
+    return total_loss / num_batches  # Return the average loss
+
+        
+def evaluate_model(model, train_loader, val_loader, device, eval_iter=None):
+    model.eval()
+    with torch.no_grad():
+        train_loss = calc_loss_loader(train_loader, model, device, num_batches=eval_iter)
+        val_loss = calc_loss_loader(val_loader, model, device, num_batches=eval_iter)
+    model.train()
+    return train_loss, val_loss
