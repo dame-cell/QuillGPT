@@ -1,6 +1,29 @@
 import torch
 import torch.nn as nn
 
+
+class GPTConfig:
+    def __init__(self, 
+                 vocab_size=50257, 
+                 context_len=256, 
+                 emb_dim=768, 
+                 num_heads=12, 
+                 num_layers=12, 
+                 drop_rate=0.1, 
+                 qkv_bias=False):
+        self.vocab_size = vocab_size
+        self.context_len = context_len
+        self.emb_dim = emb_dim
+        self.num_heads = num_heads
+        self.num_layers = num_layers
+        self.drop_rate = drop_rate
+        self.qkv_bias = qkv_bias
+
+    def __repr__(self):
+        return (f"GPTConfig(vocab_size={self.vocab_size}, context_len={self.context_len}, "
+                f"emb_dim={self.emb_dim}, num_heads={self.num_heads}, num_layers={self.num_layers}, "
+                f"drop_rate={self.drop_rate}, qkv_bias={self.qkv_bias})")
+                
 class MultiHeadAttention(nn.Module):
     def __init__(self, input_dim, output_dim, context_len, num_heads):
         super().__init__()
@@ -100,7 +123,7 @@ class GPT2(nn.Module):
         batch_size, seq_len = x.size()
         tok_embeds = self.tok_emb(x)
         pos_embeds = self.pos_emb(torch.arange(seq_len, device=x.device))
-        pos_embeds = pos_embeds.unsqueeze(0).expand(batch_size, -1, -1)
+        #pos_embeds = pos_embeds.unsqueeze(0).expand(batch_size, -1, -1)
 
         x = tok_embeds + pos_embeds
         x = self.transformers(x)

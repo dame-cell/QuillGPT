@@ -3,12 +3,16 @@ import tiktoken
 
 tokenizer = tiktoken.get_encoding("gpt2")
 
+# Helper functions for encoding/decoding text
 def text_to_token_ids(text, tokenizer):
     encoded = tokenizer.encode(text, allowed_special={'<|endoftext|>'})
     return torch.tensor(encoded).unsqueeze(0)  # Add batch dimension
 
 def token_ids_to_text(token_ids, tokenizer):
-    return tokenizer.decode(token_ids.squeeze(0).tolist()) 
+    return tokenizer.decode(token_ids.squeeze(0).tolist())  # Remove batch dimension
+
+
+
 
 def generate(model, device, idx, max_new_tokens, context_len):
     idx = idx.to(device)  

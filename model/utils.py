@@ -61,10 +61,10 @@ def calc_loss_loader(data_loader, model, device, num_batches=None):
             total_loss += calc_loss_batch(input_batch, target_batch, model, device).item()
         else:
             break
-    
-    return total_loss / num_batches  # Return the average loss
+            
+    return total_loss / num_batches
 
-        
+
 def evaluate_model(model, train_loader, val_loader, device, eval_iter=None):
     model.eval()
     with torch.no_grad():
