@@ -32,7 +32,7 @@ cd model
 
 ```python 
 from huggingface_hub import hf_hub_download
-hf_hub_download(repo_id="damerajee/smallgpt", filename="model.pt",localdir="model")
+hf_hub_download(repo_id="damerajee/smallgpt", filename="model.pt",local_dir="model")
 ```
 
 - And then try it out 
